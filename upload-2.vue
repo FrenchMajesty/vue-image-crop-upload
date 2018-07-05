@@ -815,7 +815,7 @@ export default {
 			}
 
 			// 监听进度回调
-			const uploadProgress = function(event) {
+			const onUploadProgress = function(event) {
 				if (event.lengthComputable) {
 					that.progress = 100 * Math.round(event.loaded) / event.total;
 				}
@@ -825,28 +825,13 @@ export default {
 			that.reset();
 			that.loading = 1;
 			that.setStep(3);
-			new Promise(function(resolve, reject) {
-				let client = new XMLHttpRequest();
-				client.open('POST', url, true);
-				client.withCredentials = withCredentials;
-				client.onreadystatechange = function() {
-					if (this.readyState !== 4) {
-						return;
-					}
-					if (this.status === 200 || this.status === 201) {
-						resolve(JSON.parse(this.responseText));
-					} else {
-						reject(this.status);
-					}
-				};
-				client.upload.addEventListener("progress", uploadProgress, false); //监听进度
-				// 设置header
-				if (typeof headers == 'object' && headers) {
-					Object.keys(headers).forEach((k) => {
-						client.setRequestHeader(k, headers[k]);
-					})
-				}
-				client.send(fmData);
+			new Promise((resolve, reject) => {
+				axios.post(url , fmData, {
+					withCredentials,
+					onUploadProgress,
+				})
+				.then(({data}) => resolve(data))
+				.catch((err) => reject(err));
 			}).then(
 				// 上传成功
 				function(resData) {
