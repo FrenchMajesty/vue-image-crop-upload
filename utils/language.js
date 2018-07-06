@@ -41,8 +41,8 @@ export default {
 		hint: 'Click or drag the file here to upload',
 		loading: 'Uploading…',
 		noSupported: 'Browser is not supported, please use IE10+ or other browsers',
-		success: 'Upload success',
-		fail: 'Upload failed',
+		success: 'Upload was successfully',
+		fail: 'Upload failed, please try again',
 		preview: 'Preview',
 		btn: {
 			off: 'Cancel',
